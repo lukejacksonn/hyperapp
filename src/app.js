@@ -69,9 +69,9 @@ export default function (app) {
           for (i = 0; i < hooks.onAction.length; i++) {
             hooks.onAction[i](name, data)
           }
-          return Promise.resolve(app.actions[key](model, data, actions))
-          .then((result) => {
-            if(result) { // Check it wasn't just an effect
+          return Promise.resolve(action(model, data, actions))
+          .then(result => {
+            if(typeof result === 'object') { // Check it wasn't just an effect
               for (i = 0; i < hooks.onUpdate.length; i++) {
                 hooks.onUpdate[i](model, result, data)
               }
