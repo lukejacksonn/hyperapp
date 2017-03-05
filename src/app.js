@@ -69,20 +69,16 @@ export default function (app) {
           for (i = 0; i < hooks.onAction.length; i++) {
             hooks.onAction[i](name, data)
           }
-
-          var result = action(model, data, actions, onError)
-
-          if (result === undefined || typeof result.then === "function") {
-            return result
-
-          } else {
-            for (i = 0; i < hooks.onUpdate.length; i++) {
-              hooks.onUpdate[i](model, result, data)
+          return Promise.resolve(app.actions[key](model, data, actions))
+          .then((result) => {
+            if(result) { // Check it wasn't just an effect
+              for (i = 0; i < hooks.onUpdate.length; i++) {
+                hooks.onUpdate[i](model, result, data)
+              }
+              model = merge(model, result)
+              render(model, view)
             }
-
-            model = merge(model, result)
-            render(model, view)
-          }
+          })
         }
       } else {
         init(container[key], action, name)
