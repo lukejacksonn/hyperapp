@@ -71,7 +71,7 @@ export default function (app) {
           }
           return Promise.resolve(action(model, data, actions))
           .then(result => {
-            if(typeof result === 'object') { // Check it wasn't just an effect
+            if(typeof result === 'object') {
               for (i = 0; i < hooks.onUpdate.length; i++) {
                 hooks.onUpdate[i](model, result, data)
               }
