@@ -17411,14 +17411,18 @@ var handleErrors = function handleErrors(response) {
   return response;
 };
 
+var fetchMarkdown = function fetchMarkdown(x) {
+  return fetch('/markdown' + (x === '/' ? '/README' : x) + '.md').then(function (data) {
+    return data.text();
+  }).then(_marked2.default);
+};
+
 var Article = function Article(_ref) {
   var html = _ref.html,
       a = _ref.a;
 
 
-  html ? null : fetch('/markdown/README.md').then(function (data) {
-    return data.text();
-  }).then(_marked2.default).then(a.setArticle).catch(a.setArticle);
+  html ? null : fetchMarkdown(location.pathname).then(a.setArticle);
 
   return (0, _hyperapp.h)('article', { 'class': 'markdown-body', onUpdate: function onUpdate(e) {
       return e.innerHTML = html;
@@ -17430,9 +17434,7 @@ var Aside = function Aside(_ref2) {
       a = _ref2.a;
 
 
-  html ? null : fetch('/markdown/CONTENTS.md').then(function (data) {
-    return data.text();
-  }).then(_marked2.default).then(a.setAside).catch(a.setAside);
+  html ? null : fetchMarkdown('/CONTENTS').then(a.setAside);
 
   return (0, _hyperapp.h)('aside', { 'class': 'markdown-body', onUpdate: function onUpdate(e) {
       return e.innerHTML = html;
@@ -17453,11 +17455,8 @@ var Aside = function Aside(_ref2) {
     }
   },
   events: {
-    // update: (s) => console.log(s),
     route: function route(s, a, d) {
-      fetch('/markdown' + location.pathname + '.md').then(function (data) {
-        return data.text();
-      }).then(_marked2.default).then(a.setArticle).catch(a.setArticle);
+      fetchMarkdown(location.pathname).then(a.setArticle);
     }
   },
   view: function view(s, a, d) {

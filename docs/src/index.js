@@ -13,14 +13,18 @@ const handleErrors = response => {
   return response
 }
 
+const fetchMarkdown = x =>
+  fetch(`/markdown${
+    x === '/' ? '/README' : x
+  }.md`)
+  .then(data => data.text())
+  .then(marked)
+
 const Article = ({html, a}) => {
 
   html ? null :
-    fetch('/markdown/README.md')
-    .then(data => data.text())
-    .then(marked)
+    fetchMarkdown(location.pathname)
     .then(a.setArticle)
-    .catch(a.setArticle)
 
   return <article class='markdown-body' onUpdate={ e => e.innerHTML = html }></article>
 
@@ -29,11 +33,8 @@ const Article = ({html, a}) => {
 const Aside = ({html, a}) => {
 
   html ? null :
-    fetch('/markdown/CONTENTS.md')
-    .then(data => data.text())
-    .then(marked)
+    fetchMarkdown('/CONTENTS')
     .then(a.setAside)
-    .catch(a.setAside)
 
   return <aside class='markdown-body' onUpdate={ e => e.innerHTML = html }></aside>
 
@@ -49,13 +50,9 @@ app({
     setAside: (s,d) => ({ aside: d }),
   },
   events: {
-    // update: (s) => console.log(s),
     route: (s,a,d) => {
-      fetch(`/markdown${location.pathname}.md`)
-      .then(data => data.text())
-      .then(marked)
+      fetchMarkdown(location.pathname)
       .then(a.setArticle)
-      .catch(a.setArticle)
     },
   },
   view: (s,a,d) =>
