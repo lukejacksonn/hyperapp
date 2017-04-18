@@ -8,11 +8,6 @@ marked.setOptions({
   highlight: (code) => highlight.highlightAuto(code).value
 })
 
-const handleErrors = response => {
-  if (!response.ok) throw Error(response.statusText)
-  return response
-}
-
 const fetchMarkdown = x =>
   fetch(`/markdown${
     x === '/' ? '/README' : x

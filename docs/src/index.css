@@ -65,7 +65,7 @@ aside {
   width: 320px;
 
   a { white-space: nowrap; }
-  li { margin-left: -1rem; }
+  li { margin-left: -.62rem; }
 }
 
 article {

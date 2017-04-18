@@ -17406,11 +17406,6 @@ _marked2.default.setOptions({
   }
 });
 
-var handleErrors = function handleErrors(response) {
-  if (!response.ok) throw Error(response.statusText);
-  return response;
-};
-
 var fetchMarkdown = function fetchMarkdown(x) {
   return fetch('/markdown' + (x === '/' ? '/README' : x) + '.md').then(function (data) {
     return data.text();
