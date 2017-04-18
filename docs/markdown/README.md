@@ -7,18 +7,3 @@ HyperApp is a JavaScript library for building frontend applications.
 * **Batteries-included**: Out of the box, HyperApp has Elm-like state management and a virtual DOM engine; it still weighs 1kb and has no dependencies.
 
 HyperApp is not opinionated about your stack either; we're compatible with all bundlers and work well with [Hyperx](/hyperx.md) or [JSX](/jsx.md) -- it's your choice.
-
-# Table of Contents
-
-* [Getting Started](/docs/getting-started.md)
-* [Build Pipeline](/docs/build-pipeline.md)
-  * [Hyperx](/docs/hyperx.md)
-  * [JSX](/docs/jsx.md)
-* Tutorials
-  * Rocket Launcher
-  * Tweet Box
-* Concepts
-  * Application
-  * Virtual Nodes
-  * Routing
-  * Lifecycle Events
