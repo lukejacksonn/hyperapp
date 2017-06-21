@@ -1,4 +1,4 @@
-export default function(app) {
+export default (app) => {
   var state = {}
   var view = app.view
   var actions = {}
