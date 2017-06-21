@@ -119,11 +119,8 @@ export default (app) => {
         ? element[name]
         : oldData[name]
 
-      if (name === "onupdate" && value) {
-        value(element)
-      } else if (value !== oldValue) {
-        setElementData(element, name, value, oldValue)
-      }
+      if (name === "onupdate" && value) value(element)
+      else if (value !== oldValue) setElementData(element, name, value, oldValue)
     }
   }
 
