@@ -14,9 +14,9 @@ export default (app) => {
 
     init(actions, mixin.actions)
 
-    Object.keys(mixin.events || []).map(function(key) {
+    Object.keys(mixin.events || []).map(key =>
       events[key] = (events[key] || []).concat(mixin.events[key])
-    })
+    )
   }
 
   if (document.readyState[0] !== "l") {
