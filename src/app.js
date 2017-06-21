@@ -19,11 +19,9 @@ export default (app) => {
     )
   }
 
-  if (document.readyState[0] !== "l") {
-    load()
-  } else {
-    addEventListener("DOMContentLoaded", load)
-  }
+  document.readyState[0] !== "l"
+    ? load()
+    : addEventListener("DOMContentLoaded", load)
 
   function init(namespace, children, lastName) {
     Object.keys(children || []).map(function(key) {
