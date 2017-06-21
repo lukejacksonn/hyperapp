@@ -24,31 +24,24 @@ export default (app) => {
     : addEventListener("DOMContentLoaded", load)
 
   function init(namespace, children, lastName) {
-    Object.keys(children || []).map(function(key) {
+    var update = (action, name) => data => {
+      var result = action(
+        state,
+        actions,
+        emit("action", { name, data }).data,
+        emit
+      )
+      if (result == null || typeof result.then === "function") return result
+      render((state = merge(state, emit("update", result))), view)
+    }
+
+    Object.keys(children || []).map(key => {
       var action = children[key]
       var name = lastName ? lastName + "." + key : key
 
-      if (typeof action === "function") {
-        namespace[key] = function(data) {
-          var result = action(
-            state,
-            actions,
-            emit("action", {
-              name: name,
-              data: data
-            }).data,
-            emit
-          )
-
-          if (result == null || typeof result.then === "function") {
-            return result
-          }
-
-          render((state = merge(state, emit("update", result))), view)
-        }
-      } else {
-        init(namespace[key] || (namespace[key] = {}), action, name)
-      }
+      typeof action === "function"
+        ? namespace[key] = update(action, name)
+        : init(namespace[key] || (namespace[key] = {}), action, name)
     })
   }
 
