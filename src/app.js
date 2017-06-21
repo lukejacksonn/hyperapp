@@ -80,47 +80,35 @@ export default (app) => {
   }
 
   function createElementFrom(node, isSVG) {
-    if (typeof node === "string") {
-      var element = document.createTextNode(node)
-    } else {
+    if (typeof node === "string") var element = document.createTextNode(node)
+    else {
       var element = (isSVG = isSVG || node.tag === "svg")
         ? document.createElementNS("http://www.w3.org/2000/svg", node.tag)
         : document.createElement(node.tag)
 
-      for (var i = 0; i < node.children.length; ) {
+      for (var i = 0; i < node.children.length; )
         element.appendChild(createElementFrom(node.children[i++], isSVG))
-      }
 
-      for (var i in node.data) {
-        if (i === "oncreate") {
-          node.data[i](element)
-        } else {
-          setElementData(element, i, node.data[i])
-        }
-      }
+      for (var i in node.data) i === "oncreate"
+        ? node.data[i](element)
+        : setElementData(element, i, node.data[i])
     }
 
     return element
   }
 
   function setElementData(element, name, value, oldValue) {
-    if (name === "key") {
-    } else if (name === "style") {
-      for (var i in merge(oldValue, (value = value || {}))) {
+    if (name === "key") return
+    if (name === "style") {
+      for (var i in merge(oldValue, (value = value || {})))
         element.style[i] = value[i] || ""
-      }
     } else {
-      try {
-        element[name] = value
-      } catch (_) {}
+      try { element[name] = value }
+      catch (_) {}
 
-      if (typeof value !== "function") {
-        if (value) {
-          element.setAttribute(name, value)
-        } else {
-          element.removeAttribute(name)
-        }
-      }
+      if(typeof value !== "function") value
+        ? element.setAttribute(name, value)
+        : element.removeAttribute(name)
     }
   }
 
