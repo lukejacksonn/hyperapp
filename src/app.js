@@ -51,11 +51,9 @@ export default (app) => {
   }
 
   function emit(name, data) {
-    ;(events[name] || []).map(function(cb) {
+    ;(events[name] || []).map(cb => {
       var result = cb(state, actions, data, emit)
-      if (result != null) {
-        data = result
-      }
+      if (result != null) data = result
     })
 
     return data
