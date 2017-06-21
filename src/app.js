@@ -125,9 +125,7 @@ export default (app) => {
   }
 
   function getKeyFrom(node) {
-    if (node && (node = node.data)) {
-      return node.key
-    }
+    if (node && (node = node.data)) return node.key
   }
 
   function removeElement(parent, element, node) {
