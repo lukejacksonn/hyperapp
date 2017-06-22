@@ -18,11 +18,8 @@ export default (app) => {
   for (var i = -1, mixins = []; i < mixins.length; i++) {
     var mixin = mixins[i] ? mixins[i](app) : app
     mixins = mixins.concat(array(mixin.mixins))
-
     if (mixin.state != null) state = extend(state, mixin.state)
-
     register(actions, mixin.actions)
-
     Object.keys(array(mixin.events)).map(key =>
       events[key] = array(events[key]).concat(mixin.events[key])
     )
