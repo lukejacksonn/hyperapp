@@ -1,4 +1,4 @@
-export default function(tag, data) {
+export default function(tag, data={}) {
   var node
   var stack = []
   var children = []
@@ -15,10 +15,6 @@ export default function(tag, data) {
   }
 
   return typeof tag === "string"
-    ? {
-        tag: tag,
-        data: data || {},
-        children: children
-      }
+    ? { tag, data, children }
     : tag(data, children)
 }
