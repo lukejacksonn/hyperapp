@@ -41,7 +41,7 @@ export default (app) => {
         emit
       )
       if (result == null || typeof result.then === "function") return result
-      render((state = merge(state, emit("update", result))), view)
+      render((state = merge(state, emit("update", result))), app.view)
     }
 
     Object.keys(array(children)).map(key => {
@@ -55,7 +55,7 @@ export default (app) => {
   }
 
   function load() {
-    render(state, view)
+    render(state)
     emit("loaded")
   }
 
@@ -68,12 +68,12 @@ export default (app) => {
     return data
   }
 
-  function render(state, view) {
+  function render(state) {
     element = patch(
       app.root || (app.root = document.body),
       element,
       node,
-      (node = emit("render", view)(state, actions))
+      (node = emit("render", app.view)(state, actions))
     )
   }
 
@@ -188,9 +188,8 @@ export default (app) => {
       }
 
       while (i < oldLen) {
-        var oldChild = oldNode.children[i]
-        var oldKey = getKeyFrom(oldChild)
-        if (oldKey == null) removeElement(element, oldElements[i], oldChild)
+        if (getKeyFrom(oldNode.children[i]) == null)
+          removeElement(element, oldElements[i], oldNode.children[i])
         i++
       }
 
