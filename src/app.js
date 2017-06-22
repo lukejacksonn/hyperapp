@@ -99,10 +99,10 @@ export default (app) => {
 
   function setElementData(element, name, value, oldValue) {
     if (name === "key") return
-    if (name === "style") {
+    if (name === "style")
       for (var i in merge(oldValue, (value = value || {})))
         element.style[i] = value[i] || ""
-    } else {
+    else {
       try { element[name] = value }
       catch (_) {}
 
@@ -136,9 +136,8 @@ export default (app) => {
   }
 
   function patch(parent, element, oldNode, node) {
-    if (oldNode == null) {
-      element = parent.insertBefore(createElementFrom(node), element)
-    } else if (node.tag && node.tag === oldNode.tag) {
+    if (oldNode == null) element = parent.insertBefore(createElementFrom(node), element)
+    else if (node.tag && node.tag === oldNode.tag) {
       updateElementData(element, oldNode.data, node.data)
 
       var len = node.children.length
@@ -190,10 +189,7 @@ export default (app) => {
           } else if (reusableChild[0]) {
             element.insertBefore(reusableChild[0], oldElement)
             patch(element, reusableChild[0], reusableChild[1], newChild)
-          } else {
-            patch(element, oldElement, null, newChild)
-          }
-
+          } else patch(element, oldElement, null, newChild)
           j++
           newKeys[newKey] = newChild
         }
@@ -202,9 +198,7 @@ export default (app) => {
       while (i < oldLen) {
         var oldChild = oldNode.children[i]
         var oldKey = getKeyFrom(oldChild)
-        if (null == oldKey) {
-          removeElement(element, oldElements[i], oldChild)
-        }
+        if (oldKey == null) removeElement(element, oldElements[i], oldChild)
         i++
       }
 
