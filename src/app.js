@@ -3,7 +3,7 @@ export default (app) => {
   const actions = {}
   const events = {}
   const array = x => x||[]
-  const merge = (a, b) => {
+  const extend = (a, b) => {
     var obj = {}
     if (typeof b !== "object" || Array.isArray(b)) return b
     for (var i in a) obj[i] = a[i]
@@ -19,7 +19,7 @@ export default (app) => {
     var mixin = mixins[i] ? mixins[i](app) : app
     mixins = mixins.concat(array(mixin.mixins))
 
-    if (mixin.state != null) state = merge(state, mixin.state)
+    if (mixin.state != null) state = extend(state, mixin.state)
 
     register(actions, mixin.actions)
 
@@ -41,7 +41,7 @@ export default (app) => {
         emit
       )
       if (result == null || typeof result.then === "function") return result
-      render((state = merge(state, emit("update", result))), app.view)
+      render((state = extend(state, emit("update", result))), app.view)
     }
 
     Object.keys(array(children)).map(key => {
@@ -98,7 +98,7 @@ export default (app) => {
   function setElementData(element, name, value, oldValue) {
     if (name === "key") return
     if (name === "style")
-      for (var i in merge(oldValue, (value = value || {})))
+      for (var i in extend(oldValue, (value = value || {})))
         element.style[i] = value[i] || ""
     else {
       try { element[name] = value }
@@ -111,7 +111,7 @@ export default (app) => {
   }
 
   function updateElementData(element, oldData, data) {
-    for (var name in merge(oldData, data)) {
+    for (var name in extend(oldData, data)) {
       var value = data[name]
       var oldValue = name === "value" || name === "checked"
         ? element[name]
