@@ -147,15 +147,10 @@ export default (app) => {
       var newKeys = {}
 
       for (var i = 0; i < oldLen; i++) {
-        var oldElement = element.childNodes[i]
-        oldElements[i] = oldElement
-
-        var oldChild = oldNode.children[i]
+        var [oldElement, oldChild] = [element.childNodes[i], oldNode.children[i]]
         var oldKey = getKeyFrom(oldChild)
-
-        if (null != oldKey) {
-          reusableChildren[oldKey] = [oldElement, oldChild]
-        }
+        if (oldKey != null) reusableChildren[oldKey] = [oldElement, oldChild]
+        oldElements[i] = oldElement
       }
 
       var i = 0
