@@ -1,5 +1,5 @@
 const array = x => x||[]
-const extend = (a, b) => {
+const merge = (a, b) => {
   var obj = {}
   if (typeof b !== "object" || Array.isArray(b)) return b
   for (var i in a) obj[i] = a[i]
@@ -17,7 +17,7 @@ export default (app) => {
   for (var i = -1, mixins = []; i < mixins.length; i++) {
     const mixin = mixins[i] ? mixins[i](app) : app
     mixins = mixins.concat(array(mixin.mixins))
-    if (mixin.state != null) state = extend(state, mixin.state)
+    if (mixin.state != null) state = merge(state, mixin.state)
     register(actions, mixin.actions)
     Object.keys(array(mixin.events)).map(key =>
       events[key] = array(events[key]).concat(mixin.events[key])
@@ -37,7 +37,7 @@ export default (app) => {
         emit
       )
       if (result == null || typeof result.then === "function") return result
-      render((state = extend(state, emit("update", result))), app.view)
+      render((state = merge(state, emit("update", result))), app.view)
     }
     Object.keys(array(children)).map(key => {
       const action = children[key]
@@ -89,7 +89,7 @@ export default (app) => {
   function setElementData(element, name, value, oldValue) {
     if (name === "key") return
     if (name === "style")
-      for (let i in extend(oldValue, (value = value || {})))
+      for (let i in merge(oldValue, (value = value || {})))
         element.style[i] = value[i] || ""
     else {
       try { element[name] = value }
@@ -101,7 +101,7 @@ export default (app) => {
   }
 
   function updateElementData(element, oldData, data) {
-    for (var name in extend(oldData, data)) {
+    for (var name in merge(oldData, data)) {
       var value = data[name]
       var oldValue = name === "value" || name === "checked"
         ? element[name]
@@ -129,7 +129,6 @@ export default (app) => {
       const reusableChildren = {}
       const oldElements = []
       const newKeys = {}
-
       updateElementData(element, oldNode.data, node.data)
       for (var i = 0; i < oldLen; i++) {
         const [oldElement, oldChild] = [element.childNodes[i], oldNode.children[i]]
@@ -137,24 +136,19 @@ export default (app) => {
         if (oldKey != null) reusableChildren[oldKey] = [oldElement, oldChild]
         oldElements[i] = oldElement
       }
-
       var i = 0
       var j = 0
-
       while (j < len) {
         const oldElement = oldElements[i]
         const oldChild = oldNode.children[i]
         const newChild = node.children[j]
         const oldKey = getKeyFrom(oldChild)
-
+        const newKey = getKeyFrom(newChild)
+        const reusableChild = array(reusableChildren[newKey])
         if (newKeys[oldKey]) {
           i++
           continue
         }
-
-        const newKey = getKeyFrom(newChild)
-        const reusableChild = array(reusableChildren[newKey])
-
         if (newKey == null) {
           if (oldKey == null) {
             patch(element, oldElement, oldChild, newChild)
