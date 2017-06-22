@@ -1,21 +1,30 @@
 export default (app) => {
-  var state = {}
-  var view = app.view
-  var actions = {}
-  var events = {}
-  var node
-  var element
+
+  const actions = {}
+  const events = {}
+  const array = x => x||[]
+  const merge = (a, b) => {
+    var obj = {}
+    if (typeof b !== "object" || Array.isArray(b)) return b
+    for (var i in a) obj[i] = a[i]
+    for (var i in b) obj[i] = b[i]
+    return obj
+  }
+
+  let state = {}
+  let node
+  let element
 
   for (var i = -1, mixins = []; i < mixins.length; i++) {
     var mixin = mixins[i] ? mixins[i](app) : app
-    mixins = mixins.concat(mixin.mixins || [])
+    mixins = mixins.concat(array(mixin.mixins))
 
     if (mixin.state != null) state = merge(state, mixin.state)
 
     init(actions, mixin.actions)
 
-    Object.keys(mixin.events || []).map(key =>
-      events[key] = (events[key] || []).concat(mixin.events[key])
+    Object.keys(array(mixin.events)).map(key =>
+      events[key] = array(events[key]).concat(mixin.events[key])
     )
   }
 
@@ -35,7 +44,7 @@ export default (app) => {
       render((state = merge(state, emit("update", result))), view)
     }
 
-    Object.keys(children || []).map(key => {
+    Object.keys(array(children)).map(key => {
       var action = children[key]
       var name = lastName ? lastName + "." + key : key
 
@@ -51,7 +60,7 @@ export default (app) => {
   }
 
   function emit(name, data) {
-    ;(events[name] || []).map(cb => {
+    array(events[name]).map(cb => {
       var result = cb(state, actions, data, emit)
       if (result != null) data = result
     })
@@ -66,17 +75,6 @@ export default (app) => {
       node,
       (node = emit("render", view)(state, actions))
     )
-  }
-
-  function merge(a, b) {
-    var obj = {}
-
-    if (typeof b !== "object" || Array.isArray(b)) return b
-
-    for (var i in a) obj[i] = a[i]
-    for (var i in b) obj[i] = b[i]
-
-    return obj
   }
 
   function createElementFrom(node, isSVG) {
@@ -168,7 +166,7 @@ export default (app) => {
         }
 
         var newKey = getKeyFrom(newChild)
-        var reusableChild = reusableChildren[newKey] || []
+        var reusableChild = array(reusableChildren[newKey])
 
         if (newKey == null) {
           if (oldKey == null) {
