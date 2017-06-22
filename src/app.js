@@ -21,7 +21,7 @@ export default (app) => {
 
     if (mixin.state != null) state = merge(state, mixin.state)
 
-    init(actions, mixin.actions)
+    register(actions, mixin.actions)
 
     Object.keys(array(mixin.events)).map(key =>
       events[key] = array(events[key]).concat(mixin.events[key])
@@ -32,7 +32,7 @@ export default (app) => {
     ? load()
     : addEventListener("DOMContentLoaded", load)
 
-  function init(namespace, children, lastName) {
+  function register(namespace, children, lastName) {
     var update = (action, name) => data => {
       var result = action(
         state,
@@ -50,7 +50,7 @@ export default (app) => {
 
       typeof action === "function"
         ? namespace[key] = update(action, name)
-        : init(namespace[key] || (namespace[key] = {}), action, name)
+        : register(namespace[key] || (namespace[key] = {}), action, name)
     })
   }
 
