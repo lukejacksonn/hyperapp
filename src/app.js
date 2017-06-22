@@ -168,11 +168,10 @@ export default (app) => {
         }
 
         var newKey = getKeyFrom(newChild)
-
         var reusableChild = reusableChildren[newKey] || []
 
-        if (null == newKey) {
-          if (null == oldKey) {
+        if (newKey == null) {
+          if (oldKey == null) {
             patch(element, oldElement, oldChild, newChild)
             j++
           }
