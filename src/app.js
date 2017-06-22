@@ -196,13 +196,11 @@ export default (app) => {
         i++
       }
 
-      for (var i in reusableChildren) {
-        var reusableChild = reusableChildren[i]
-        var reusableNode = reusableChild[1]
-        if (!newKeys[reusableNode.data.key]) {
-          removeElement(element, reusableChild[0], reusableNode)
-        }
-      }
+      Object.keys(reusableChildren)
+      .map(key => !newKeys[reusableChildren[key][1].data.key]
+        ? removeElement(element, reusableChildren[key][0], reusableChildren[key][1])
+        : null
+      )
     } else if (node !== oldNode) {
       var i = element
       parent.replaceChild((element = createElementFrom(node)), i)
