@@ -1,4 +1,4 @@
-const array = x => x||[]
+const array = x => x || []
 const merge = (a, b) => {
   var obj = {}
   if (typeof b !== "object" || Array.isArray(b)) return b
@@ -79,9 +79,10 @@ export default (app) => {
         : document.createElement(node.tag)
       for (let i = 0; i < node.children.length; )
         element.appendChild(createElementFrom(node.children[i++], isSVG))
-      for (let i in node.data) i === "oncreate"
-        ? node.data[i](element)
-        : setElementData(element, i, node.data[i])
+      for (let i in node.data)
+        i === "oncreate"
+          ? node.data[i](element)
+          : setElementData(element, i, node.data[i])
     }
     return element
   }
@@ -92,11 +93,13 @@ export default (app) => {
       for (let i in merge(oldValue, (value = value || {})))
         element.style[i] = value[i] || ""
     else {
-      try { element[name] = value }
-      catch (_) {}
-      if(typeof value !== "function") value
-        ? element.setAttribute(name, value)
-        : element.removeAttribute(name)
+      try {
+        element[name] = value
+      } catch (_) {}
+      if (typeof value !== "function")
+        value
+          ? element.setAttribute(name, value)
+          : element.removeAttribute(name)
     }
   }
 
@@ -107,7 +110,8 @@ export default (app) => {
         ? element[name]
         : oldData[name]
       if (name === "onupdate" && value) value(element)
-      else if (value !== oldValue) setElementData(element, name, value, oldValue)
+      else if (value !== oldValue)
+        setElementData(element, name, value, oldValue)
     }
   }
 
@@ -131,7 +135,10 @@ export default (app) => {
       const newKeys = {}
       updateElementData(element, oldNode.data, node.data)
       for (var i = 0; i < oldLen; i++) {
-        const [oldElement, oldChild] = [element.childNodes[i], oldNode.children[i]]
+        const [oldElement, oldChild] = [
+          element.childNodes[i],
+          oldNode.children[i]
+        ]
         const oldKey = getKeyFrom(oldChild)
         if (oldKey != null) reusableChildren[oldKey] = [oldElement, oldChild]
         oldElements[i] = oldElement
@@ -172,10 +179,15 @@ export default (app) => {
           removeElement(element, oldElements[i], oldNode.children[i])
         i++
       }
-      Object.keys(reusableChildren)
-      .map(key => !newKeys[reusableChildren[key][1].data.key]
-        ? removeElement(element, reusableChildren[key][0], reusableChildren[key][1])
-        : null
+      Object.keys(reusableChildren).map(
+        key =>
+          !newKeys[reusableChildren[key][1].data.key]
+            ? removeElement(
+                element,
+                reusableChildren[key][0],
+                reusableChildren[key][1]
+              )
+            : null
       )
     } else if (node !== oldNode) {
       const i = element
