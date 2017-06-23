@@ -19,9 +19,7 @@ export default function(app) {
     mixins = mixins.concat(array(mixin.mixins))
     if (mixin.state != null) state = merge(state, mixin.state)
     register(actions, mixin.actions)
-    Object.keys(array(mixin.events)).map(key =>
-      events[key] = array(events[key]).concat(mixin.events[key])
-    )
+    extend(mixin.events)
   }
 
   document.readyState[0] !== "l"
@@ -43,9 +41,15 @@ export default function(app) {
       const action = children[key]
       const name = lastName ? lastName + "." + key : key
       typeof action === "function"
-        ? namespace[key] = update(action, name)
+        ? (namespace[key] = update(action, name))
         : register(namespace[key] || (namespace[key] = {}), action, name)
     })
+  }
+
+  function extend(e) {
+    Object.keys(array(e)).map(
+      key => (events[key] = array(events[key]).concat(e[key]))
+    )
   }
 
   function load() {
