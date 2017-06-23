@@ -7,7 +7,7 @@ const merge = (a, b) => {
   return obj
 }
 
-export default (app) => {
+export default function(app) {
   const actions = {}
   const events = {}
   let state = {}
