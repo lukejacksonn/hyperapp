@@ -33,6 +33,8 @@
   },
   "devDependencies": {
     "jest": "^20.0.4",
+    "nanobench": "^2.1.0",
+    "node-irhydra": "^1.0.0",
     "node-zopfli": "^2.0.2",
     "prettier": "~1.4.1",
     "rollup": "^0.41.6",
