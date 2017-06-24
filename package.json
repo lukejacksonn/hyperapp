@@ -22,7 +22,10 @@
   ],
   "scripts": {
     "test": "jest --coverage --no-cache",
+    "perf": "npm run build -s && npm run size -s && npm run bench -s && npm run trace -s",
     "build": "rollup -cm -n hyperapp -f umd -i src/index.js -o dist/hyperapp.js",
+    "bench": "rollup perf/h.js -f cjs | node",
+    "trace": "rollup perf/h.js -f cjs | node-irhydra",
     "size": "npm run build && zopfli dist/hyperapp.js > dist/hyperapp.js.gz && stat -f%z dist/hyperapp.js.gz && rm dist/hyperapp.js.gz",
     "prepublish": "npm run build",
     "format": "prettier --semi false --write 'src/**/*.js'",
