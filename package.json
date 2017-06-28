@@ -26,12 +26,16 @@
     "build": "rollup -cm -n hyperapp -f umd -i src/index.js -o dist/hyperapp.js",
     "bench": "rollup perf/h.js -f cjs | node",
     "trace": "rollup perf/h.js -f cjs | node-irhydra",
-    "size": "npm run build && zopfli dist/hyperapp.js > dist/hyperapp.js.gz && stat -f%z dist/hyperapp.js.gz && rm dist/hyperapp.js.gz",
+    "size": "zopfli dist/hyperapp.js > dist/hyperapp.js.gz && stat -f%z dist/hyperapp.js.gz && rm dist/hyperapp.js.gz",
     "prepublish": "npm run build",
     "format": "prettier --semi false --write 'src/**/*.js'",
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
+  "babel": {
+    "presets": ["es2015"]
+  },
   "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
     "jest": "^20.0.4",
     "nanobench": "^2.1.0",
     "node-irhydra": "^1.0.0",
