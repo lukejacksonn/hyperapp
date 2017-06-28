@@ -10,7 +10,7 @@
     * [action](#action)
     * [update](#update)
     * [render](#render)
-  * [props.plugins](#plugins)
+  * [props.mixins](#mixins)
   * [props.root](#root)
 * [emit](#emit)
 
@@ -22,7 +22,7 @@ Type: ([tag](#h-tag), [data](#h-data), [children](#h-children)): [vnode]
 
 * <a name="h-tag"></a>tag: string | ([props](#h-data), [children](#h-children)): [vnode]
 * <a name="h-data"></a>data: {}
-* <a name="h-children"></a>children: string | [vnode]\[\]
+* <a name="h-children"></a>children: string | Array\<[vnode]\>
 
 ## app
 
@@ -33,7 +33,7 @@ Type: ([props](#app-props))
   * [view](#view)
   * [actions](#actions)
   * [events](#events)
-  * [plugins](#plugins)
+  * [mixins](#mixins)
   * [root](#root)
 
 ### state
@@ -54,13 +54,13 @@ Type: ([state](#state), [actions](#actions), [data](#actions-data), [emit](#emit
 ### events
 #### loaded
 
-Type: ([state](#state), [actions](#actions), _, [emit](#emit)) | [events](#loaded)\[\]
+Type: ([state](#state), [actions](#actions), _, [emit](#emit)) | Array\<[events](#loaded)\>
 
 Fired after the view is mounted on the DOM.
 
 #### action
 
-Type: ([state](#state), [actions](#actions), [data](#action-data), [emit](#emit)): [data](#action-data) | [action](#action)\[\]
+Type: ([state](#state), [actions](#actions), [data](#action-data), [emit](#emit)): [data](#action-data) | Array\<[action](#action)\>
 
 * <a name="action-data"></a>data
   * name: string
@@ -70,7 +70,7 @@ Fired before an action is triggered.
 
 #### update
 
-Type: ([state](#state), [actions](#actions), [data](#update-data), [emit](#emit)): [data](#update-data) | [update](#update)\[\]
+Type: ([state](#state), [actions](#actions), [data](#update-data), [emit](#emit)): [data](#update-data) | Array\<[update](#update)\>
 
 * <a name="update-data"></a>data: the updated fragment of the state.
 
@@ -78,19 +78,20 @@ Fired before the state is updated.
 
 #### render
 
-Type: ([state](#state), [actions](#actions), [view](#view), [emit](#emit)): [view](#view) | [render](#render)\[\]
+Type: ([state](#state), [actions](#actions), [view](#view), [emit](#emit)): [view](#view) | Array\<[render](#render)\>
 
 Fired before the view is rendered.
 
-### plugins
+### mixins
 
-Type: [Plugin](#plugins-plugin)\[\]
+Type: Array\<[Mixin](#mixins-mixin)\>
 
-#### <a name="plugins-plugin"></a>Plugin
+#### <a name="mixins-mixin"></a>Mixin
 
-Type: ([props](#app-props)): [props](#plugin-props)
+Type: ([props](#app-props)): [props](#mixin-props)
 
-* <a name="plugin-props"></a>props
+* <a name="mixin-props"></a>props
+  * [mixins](#mixins)
   * [state](#state)
   * [actions](#actions)
   * [events](#events)

@@ -8,7 +8,7 @@
     * [Namespaces](#namespaces)
   * [Events](#events)
     * [Custom Events](#custom-events)
-  * [Plugins](#plugins)
+  * [Mixins](#mixins)
 
 ## Virtual Nodes
 
@@ -64,7 +64,7 @@ data: {
 }
 ```
 
-Attributes also include [lifecycle events](/docs/lifecycle-events.md) and meta data such as [keys](#/docs/keys.md).
+Attributes also include [lifecycle events](/docs/lifecycle-events.md) and meta data such as [keys](/docs/keys.md).
 
 ## Applications
 
@@ -176,8 +176,9 @@ app({
   ),
   actions: {
     addOne: state => state + 1,
-    addOneDelayed: (state, actions) =>
+    addOneDelayed: (state, actions) => {
       setTimeout(actions.addOne, 1000)
+    }
   }
 })
 ```
@@ -260,7 +261,7 @@ Events can be used to hook into the update and render pipeline.
 app({
   view: state => <h1>Hi.</h1>,
   events: {
-    render: (state, ations, data) => {
+    render: (state, actions, data) => {
       if (location.pathname === "/warp") {
         return state => <h1>Welcome to warp zone!</h1>
       }
@@ -291,9 +292,9 @@ app({
 })
 ```
 
-### Plugins
+### Mixins
 
-Use [plugins](/docs/api.md#events) to extend your application state, actions and events in a modular fashion.
+Use [mixins](/docs/api.md#mixins) to extend your application state, actions and events in a modular fashion.
 
 ```jsx
 const Logger = () => ({
@@ -312,6 +313,7 @@ app({
   actions: {
     addOne: state => state + 1
   },
-  plugins: [Logger]
+  mixins: [Logger]
 })
 ```
+

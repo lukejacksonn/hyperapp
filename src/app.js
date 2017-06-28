@@ -6,17 +6,18 @@ export default function(app) {
   var node
   var element
 
-  for (var i = -1, plugins = app.plugins || []; i < plugins.length; i++) {
-    var plugin = plugins[i] ? plugins[i](app) : app
+  for (var i = -1, mixins = []; i < mixins.length; i++) {
+    var mixin = mixins[i] ? mixins[i](app) : app
+    mixins = mixins.concat(mixin.mixins || [])
 
-    if (plugin.state != null) {
-      state = merge(state, plugin.state)
+    if (mixin.state != null) {
+      state = merge(state, mixin.state)
     }
 
-    init(actions, plugin.actions)
+    init(actions, mixin.actions)
 
-    Object.keys(plugin.events || []).map(function(key) {
-      events[key] = (events[key] || []).concat(plugin.events[key])
+    Object.keys(mixin.events || []).map(function(key) {
+      events[key] = (events[key] || []).concat(mixin.events[key])
     })
   }
 
@@ -43,11 +44,11 @@ export default function(app) {
             emit
           )
 
-          if (result == null || typeof result.then === "function") {
-            return result
+          if (result != null && typeof result.then !== "function") {
+            render((state = merge(state, emit("update", result))), view)
           }
 
-          render((state = merge(state, emit("update", result))), view)
+          return result
         }
       } else {
         init(namespace[key] || (namespace[key] = {}), action, name)
@@ -145,11 +146,13 @@ export default function(app) {
   function updateElementData(element, oldData, data) {
     for (var name in merge(oldData, data)) {
       var value = data[name]
-      var oldValue = oldData[name]
+      var oldValue = name === "value" || name === "checked"
+        ? element[name]
+        : oldData[name]
 
-      if (name === "onupdate") {
+      if (name === "onupdate" && value) {
         value(element)
-      } else if (value !== oldValue || value !== element[name]) {
+      } else if (value !== oldValue) {
         setElementData(element, name, value, oldValue)
       }
     }
@@ -162,10 +165,10 @@ export default function(app) {
   }
 
   function removeElement(parent, element, node) {
-    if (node.data && node.data.onremove) {
-      node.data.onremove(element)
+    ;((node.data && node.data.onremove) || removeChild)(element, removeChild)
+    function removeChild() {
+      parent.removeChild(element)
     }
-    parent.removeChild(element)
   }
 
   function patch(parent, element, oldNode, node) {
