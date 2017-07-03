@@ -21,7 +21,7 @@
     "virtual-dom"
   ],
   "scripts": {
-    "test": "jest --coverage --no-cache",
+    "test": "bundlesize && jest --coverage --no-cache",
     "build": "rollup -cm -n hyperapp -f umd -i src/index.js -o dist/hyperapp.js",
     "prepublish": "npm run build",
     "format": "prettier --semi false --write 'src/**/*.js'",
@@ -32,9 +32,16 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
+    "bundlesize": "^0.6.1",
     "jest": "^20.0.4",
-    "prettier": "~1.4.1",
-    "rollup": "^0.41.6",
+    "prettier": "~1.5.2",
+    "rollup": "^0.43.0",
     "rollup-plugin-uglify": "^2.0.1"
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/hyperapp.js",
+      "threshold": "1.5Kb"
+    }
+  ]
 }
