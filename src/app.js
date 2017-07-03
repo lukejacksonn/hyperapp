@@ -6,6 +6,8 @@ export function app(app) {
   var node
   var element
 
+  var dimensional = i => !(/acit|ex(?:s|g|n|p|$)|rph|ows|mnc|ntw|ine[ch]|zoo|^ord/i.test(i))
+
   for (var i = -1, mixins = []; i < mixins.length; i++) {
     var mixin = mixins[i] ? mixins[i](app) : app
     mixins = mixins.concat(mixin.mixins || [])
@@ -126,7 +128,9 @@ export function app(app) {
     if (name === "key") {
     } else if (name === "style") {
       for (var i in merge(oldValue, (value = value || {}))) {
-        element.style[i] = value[i] || ""
+        element.style[i] = typeof value[i]==='number' && dimensional(i)
+          ? (value[i] + 'px')
+          : value[i]
       }
     } else {
       try {
